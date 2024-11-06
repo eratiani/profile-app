@@ -12,7 +12,7 @@ export class AuthService {
   private http = inject(HttpClient);
   constructor() {}
   registerUser(userDTO: userDTO) {
-    return this.http.post(`${this.API}/users`, userDTO);
+    return this.http.post<userDTO[]>(`${this.API}/users`, userDTO);
   }
   getUser(userDto: userDTO):Observable<userDTO[] |[]>  {
     const params = new HttpParams()
