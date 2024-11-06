@@ -1,0 +1,23 @@
+<ul class="flex gap-4 items-center">
+    <li class="w-[90px]">
+      <app-lib-button
+        [routerLink]="routeEnum.SIGNIN"
+        [btnConfig]="{
+          type: 'button',
+          classList: 'h-4'
+        }"
+        type="primary"
+        >Sign In</app-lib-button
+      >
+    </li>
+    <li class="w-[90px]">
+      <app-lib-button
+        [routerLink]="routeEnum.REGISTRATION"
+        [btnConfig]="{
+          type: 'button'
+        }"
+        type="primary"
+        >Sign Up</app-lib-button
+      >
+    </li>
+</ul>

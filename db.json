@@ -1,0 +1,40 @@
+{
+  "userData": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phoneNumber": "123-456-7890",
+      "profilePicture": "https://example.com/profile_pictures/john_doe.jpg"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "phoneNumber": "098-765-4321",
+      "profilePicture": "https://example.com/profile_pictures/jane_smith.jpg"
+    },
+    {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "email": "alice.johnson@example.com",
+      "phoneNumber": "",
+      "profilePicture": "https://example.com/profile_pictures/alice_johnson.jpg"
+    },
+    {
+      "firstName": "Bob",
+      "lastName": "Brown",
+      "email": "bob.brown@example.com",
+      "phoneNumber": "555-555-5555",
+      "profilePicture": ""
+    },
+    {
+      "firstName": "Charlie",
+      "lastName": "Davis",
+      "email": "charlie.davis@example.com",
+      "phoneNumber": "",
+      "profilePicture": "https://example.com/profile_pictures/charlie_davis.jpg"
+    }
+  ],
+  "users": [{ "userName": "john doe", "password": "Password1" }]
+}
