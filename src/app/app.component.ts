@@ -31,7 +31,6 @@ export class AppComponent implements OnInit {
           if (val) {
             this.messageService.clear();
             this.messageService.add({ severity: 'error', summary: 'Error', detail: val ,life: 1000 });
-            console.log(val);
           }
           
         }

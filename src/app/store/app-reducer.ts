@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { AppInterface } from './app.interface';
-import { login, loginFailure, loginSuccess, register, registerFailure, registerSuccess } from './app.action';
+import { login, loginFailure, loginSuccess, logOut, register, registerFailure, registerSuccess } from './app.action';
 
 export const initState: AppInterface = {
   auth: {user:{password:"",userName:""},isLoggedIn:false,error:null},
@@ -58,5 +58,9 @@ export const appReducer = createReducer(
         isLoggedIn: false,
         error
       }
+    })),
+    on(logOut,()=>({
+        ...initState,
     }))
+    
   );

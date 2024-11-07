@@ -1,7 +1,8 @@
 export enum AppUrlEnum {
     SIGNIN = 'sign-in',
     REGISTRATION = 'registration',
-    HOME = 'user',
+    HOME = 'home',
+    USER='user'
   }
   
  

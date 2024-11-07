@@ -6,9 +6,13 @@ import { Actions, createEffect, ofType} from '@ngrx/effects';
 import { of } from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
 import { userDTO } from '../shared/services/user.interface';
+import { Router } from '@angular/router';
+import { AppUrlEnum } from '.././core/const/route-enums';
 
 @Injectable()
 export class AuthEffects {
+    
+    private router = inject(Router)
     private actions$ = inject(Actions)
   constructor( private authService: AuthService) {}
 
@@ -32,11 +36,28 @@ export class AuthEffects {
       ofType(register),
       mergeMap(({ credentials }) =>
         this.authService.registerUser(credentials).pipe(
-          map((user: userDTO[]) => registerSuccess({ user:user[0] })),
+          map((user: userDTO) => registerSuccess({ user:user })),
           catchError((error) => of(registerFailure({ error: error.message })))
         )
       )
     )
   );
-
+  registerSuccessNavigate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(registerSuccess),
+      tap(() => {
+        this.router.navigate([AppUrlEnum.USER]);
+      })
+    ),
+    { dispatch: false }
+  );
+  logInSuccessNavigate$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loginSuccess),
+      tap(() => {
+        this.router.navigate([AppUrlEnum.USER]);
+      })
+    ),
+    { dispatch: false }
+  );
 }
