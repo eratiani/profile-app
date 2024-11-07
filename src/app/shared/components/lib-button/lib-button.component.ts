@@ -15,10 +15,10 @@ export class LibButtonComponent {
     classList: '',
     disabled: false,
   };
-  @Input() type: LibButtonType = 'primary';
+  @Input() type: LibButtonType = 'primary' ;
   btnTypeSelect = {
     primary:
-      'bg-primary-green w-full py-2  px-1 rounded-lg text-white disabled:bg-btn-disabled',
-
+      'bg-primary-green w-full p-1 rounded-lg text-white disabled:bg-btn-disabled hover:bg-[#17A55D] ease-in-out duration-300',
+      secondary:'bg-primary-blue w-full p-1 rounded-lg text-white disabled:bg-btn-disabled hover:bg-[#0275B1] ease-in-out duration-300'
   };
 }

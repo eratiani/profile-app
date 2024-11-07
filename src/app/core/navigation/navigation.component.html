@@ -9,7 +9,7 @@
     <li class="w-[90px]">
         <app-lib-button [routerLink]="routeEnum.REGISTRATION" [btnConfig]="{
           type: 'button'
-        }" type="primary">Sign Up</app-lib-button>
+        }" type="secondary">Sign Up</app-lib-button>
     </li>
     } @else {
     <li class="w-[90px]">
@@ -22,6 +22,6 @@
     <li class="w-[90px]"> <app-lib-button (click)="onUserLogOut()" [routerLink]="routeEnum.HOME" [btnConfig]="{
           type: 'button',
           classList: 'h-4'
-        }" type="primary">Log Out</app-lib-button></li>
+        }" type="secondary">Log Out</app-lib-button></li>
     }
 </ul>

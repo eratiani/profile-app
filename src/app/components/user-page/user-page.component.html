@@ -1,1 +1,37 @@
-<p>user-page works!</p>
+<section class="w-9/12 mx-auto overflow-x-auto shadow-md sm:rounded-lg">
+    @if (users$ |async; as users) {
+        <p-table [value]="users" styleClass="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            
+            <ng-template pTemplate="caption">
+                <div class="flex align-items-center justify-content-between">
+                    Users
+                    <p-button icon="pi pi-refresh" />
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr class="bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-400 text-xs uppercase">
+                    <th>Image</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-user>
+                <tr [routerLink]="user.id" class="hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition duration-300 ease-in-out">
+                    <td class="w-20">
+                        <img *ngIf="user.profilePicture" [src]="user.profilePicture" [alt]="user.firstName" class="rounded-full w-10 h-10 object-cover">
+                    </td>       
+                    <td>{{user?.firstName}} {{user?.lastName}}</td>
+                    <td>{{user?.email}}</td>
+                    <td>{{user?.phoneNumber | phoneFormat}}</td>
+                    <td (click)="onDeleteUser(user.id, $event)" class="ps-8">
+                        <i class="pi pi-trash cursor-pointer" style="color: red"></i></td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+}
+</section>

@@ -4,4 +4,4 @@ export interface ILibButton {
   disabled?: boolean;
   active? : boolean;
 }
-export type LibButtonType = 'primary' ;
+export type LibButtonType = 'primary' | "secondary" ;
