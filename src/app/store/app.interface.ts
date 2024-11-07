@@ -1,8 +1,9 @@
+import { IUser } from "../components/user-page/user.interface";
 import { userDTO } from "../shared/services/user.interface";
 
 export interface AppInterface {
   auth: AuthState;
-  Users:UserInterface[],
+  users:IUser[],
   items:number
 }
 export interface AuthState {

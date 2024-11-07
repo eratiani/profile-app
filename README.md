@@ -1,27 +1,92 @@
-# ProfileApp
+# Task: Implement User Profile Edit Feature
+## How to run application
+### 1. run npm i or npm ci
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.4.
+## Install App 
+1. To install Angular application, please run the following command: npm i or npm ci
+2. To install Jason Server please run the following command: npm i json-server
+## Running App
+1. application is using latest version of angular run ng s or npm run start to start development server on http://localhost:4200/
+2. application is using db.json to simulate backend  run  npx json-server db.json
+## Objective
+Develop a feature that allows users to update their profile information using a form within an Angular application. The form should be pre-populated with the current user's data and include form validation.
+---
+## About App 
+1. The project includes an authorization/registration page that has its own validations and obligation to fill in mandatory fields.
+2. user authorization/registration is mannaged by ngrx state managemen 
+3. to log in u can either register or use username john doe password: Password1 
+4. user status is managed by auth guard via ngrx state management 
+5. loged in user can navigate to user page where they can edit create and delete data.
+6. Angular Router is used to navigate between pages.which is also loaded as a lazy load.
+7. To manage asynchronous information, the RxJs library is used.
+8. Angular HttpClient is used to interact with the back server. (JSON Server)
+9. For every successful or unsuccessful operation, a corresponding note is displayed, so that the customer can understand whether he made a mistake or not, or vice versa.
+10. user edit form includes appropriate validation with error messages
+11. user edit form include image upload.
 
-## Development server
+## Requirements
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### 1. Form Creation
+- **Component**: Created a new `UserProfileEditComponent`.
+- **Fields**: The form includes the following fields:
+  - **First Name**: Text field (Required)
+  - **Last Name**: Text field (Required)
+  - **Email**: Email field (Required, validated)
+  - **Phone Number**: Optional text field (numeric validation)
+  - **Profile Picture**: Optional file upload
 
-## Code scaffolding
+### 2. Form Validation
+- **Validation Rules**:
+  - **First Name**: Required
+  - **Last Name**: Required
+  - **Email**: Required and must be a valid email format
+  - **Phone Number**: Numeric-only input, optional
+- **Error Messages**: Displays appropriate error messages when validation fails.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 3. Data Pre-Population
+- **Pre-population**: The form is pre-populated with the current user profile data fetched from a mock service.
+- **Editable Fields**: All fields are editable, allowing the user to modify and submit updated information.
 
-## Build
+### 4. API Integration
+- **Integration**: Integrated the form with a mock API using Angular’s HttpClient.
+  - **Submission**: On form submission, sends a PUT or PATCH request to update the user profile.
+  - **Feedback**: Displays success or error notifications based on the API response.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 5. Profile Picture Upload
+- **File Upload**: Added file upload functionality for the profile picture.
+  - **Preview**: Preview functionality for the profile picture before submission.
+  - **Data Submission**: If a new profile picture is uploaded, it is sent along with the user profile update request.
 
-## Running unit tests
+### 6. UI/UX
+- **Styling**: Used [UI Framework, e.g., Angular Material, Bootstrap, or TailwindCSS] for styling the form.
+- **Buttons**: Included "Save" and "Cancel" buttons.
+- **Loading Indicator**: Added a loading spinner during form submission.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 7. Routing
+- **Route**: Added routing so `UserProfileEditComponent` is accessible via the `/edit-profile` route.
 
-## Running end-to-end tests
+### 8. Testing
+- **Unit Tests**: -
+  - **Pre-population**: Ensures form is pre-populated with user data.
+  - **Submission**: Successful submission functionality.
+  - **Error Handling**: Correct handling and display of validation errors.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## Deliverables
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Source Code**: Available with detailed commit history.
+- **Documentation**: 
+  - Instructions on how to run the application.
+  - Steps to test the feature.
+
+---
+
+## Additional Notes
+- **Enhancements**:
+  - Responsive design for improved mobile compatibility.
+  - Error handling improvements for failed API calls.
+  
+**Completion Date**: 11/08/2024
+
+**Author**: erekle ratiani

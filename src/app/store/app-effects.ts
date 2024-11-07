@@ -1,20 +1,21 @@
 // auth.effects.ts
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
-import { login, loginFailure, loginSuccess, register, registerFailure, registerSuccess } from './app.action';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { fetchUsers, fetchUsersFailure, fetchUsersSuccess, login, loginFailure, loginSuccess, register, registerFailure, registerSuccess } from './app.action';
 import { Actions, createEffect, ofType} from '@ngrx/effects';
 import { of } from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
 import { userDTO } from '../shared/services/user.interface';
 import { Router } from '@angular/router';
 import { AppUrlEnum } from '.././core/const/route-enums';
+import { UserService } from '../shared/services/user.service';
 
 @Injectable()
 export class AuthEffects {
     
     private router = inject(Router)
     private actions$ = inject(Actions)
-  constructor( private authService: AuthService) {}
+  constructor( private authService: AuthService,private userService:UserService) {}
 
   login$ = createEffect(() =>
     this.actions$.pipe(
@@ -59,5 +60,16 @@ export class AuthEffects {
       })
     ),
     { dispatch: false }
+  );
+  userDataFetchEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchUsers),
+      switchMap(() => 
+        this.userService.getUserData().pipe(
+          map(userArr => fetchUsersSuccess(userArr)),  
+          catchError(error => of(fetchUsersFailure(error)))  
+        )
+      )
+    )
   );
 }

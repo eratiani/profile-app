@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import { AppInterface } from './app.interface';
-import { login, loginFailure, loginSuccess, logOut, register, registerFailure, registerSuccess } from './app.action';
+import { fetchUsers, fetchUsersFailure, fetchUsersSuccess, login, loginFailure, loginSuccess, logOut, register, registerFailure, registerSuccess } from './app.action';
 
 export const initState: AppInterface = {
   auth: {user:{password:"",userName:""},isLoggedIn:false,error:null},
-  Users: [],
+  users: [],
   items:0
 };
 
@@ -34,7 +34,7 @@ export const appReducer = createReducer(
         error
       }
     })),
-    
+    ////////////registration
     on(register, (state) => ({
       ...state,
       auth: { ...state.auth, error: null }
@@ -59,8 +59,20 @@ export const appReducer = createReducer(
         error
       }
     })),
+
+    ///////////////logout
     on(logOut,()=>({
         ...initState,
-    }))
+    })),
     
+    ////////////////user data
+    on(fetchUsersSuccess, (state, { userArr }) => ({
+      ...state,
+      users: userArr,
+    })),
+    on(fetchUsersFailure, (state, { error }) => ({
+      ...state,
+      error,
+    }))
+  
   );

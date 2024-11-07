@@ -9,22 +9,25 @@ import { AppInterface } from '../../store/app.interface';
 import { Store } from '@ngrx/store';
 import { PhoneFormatPipe } from '../../shared/pipes/phone-format.pipe';
 import { UserService } from '../../shared/services/user.service';
-import { Observable } from 'rxjs';
+import { distinctUntilChanged, Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
+import { fetchUsers } from '../../store/app.action';
+
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule, PhoneFormatPipe, RouterLink,DialogModule],
+  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule, PhoneFormatPipe, RouterLink,DialogModule,],
   templateUrl: './user-page.component.html',
 })
 export class UserPageComponent implements OnInit {
-  users$!: Observable<IUser[]>;
+  users$!:Observable<IUser[]>;
   messageService = inject(MessageService)
   store = inject(Store<AppInterface>)
   userService = inject(UserService)
   display = false
+  constructor() {}
 
 onReject() {
   this.display = false
@@ -40,14 +43,14 @@ onDeleteUser(arg0: string,) {
   this.display = false
 }
  
-  constructor() {}
   onShowModal(ev:Event) {
     ev.stopImmediatePropagation()
   this.display = true
   }
   ngOnInit() {
-    this.users$ = this.userService.getUserData()
+    // this.users$ = this.userService.getUserData()
+     this.store.dispatch(fetchUsers())
+    this.users$ = this.store.select((state: { app: AppInterface }) => state.app.users)
+    .pipe(distinctUntilChanged());
   }
-
-  
 }
