@@ -1,7 +1,7 @@
 import { userDTO } from "../shared/services/user.interface";
 
 export interface AppInterface {
-  Auth: AuthState;
+  auth: AuthState;
   Users:UserInterface[],
   items:number
 }

@@ -3,7 +3,7 @@ import { AppInterface } from './app.interface';
 import { login, loginFailure, loginSuccess, register, registerFailure, registerSuccess } from './app.action';
 
 export const initState: AppInterface = {
-  Auth: {user:{password:"",userName:""},isLoggedIn:false,error:null},
+  auth: {user:{password:"",userName:""},isLoggedIn:false,error:null},
   Users: [],
   items:0
 };
@@ -13,7 +13,7 @@ export const appReducer = createReducer(
     
     on(login, (state) => ({
       ...state,
-      auth: { ...state.Auth, error: null }
+      auth: { ...state.auth, error: null }
     })),
     
     on(loginSuccess, (state, { user }) => ({
@@ -28,7 +28,7 @@ export const appReducer = createReducer(
     on(loginFailure, (state, { error }) => ({
       ...state,
       auth: {
-        ...state.Auth,
+        ...state.auth,
         user: null,
         isLoggedIn: false,
         error
@@ -37,13 +37,13 @@ export const appReducer = createReducer(
     
     on(register, (state) => ({
       ...state,
-      auth: { ...state.Auth, error: null }
+      auth: { ...state.auth, error: null }
     })),
     
     on(registerSuccess, (state, { user }) => ({
       ...state,
       auth: {
-        ...state.Auth,
+        ...state.auth,
         user,
         isLoggedIn: true,
         error: null
@@ -53,7 +53,7 @@ export const appReducer = createReducer(
     on(registerFailure, (state, { error }) => ({
       ...state,
       auth: {
-        ...state.Auth,
+        ...state.auth,
         user: null,
         isLoggedIn: false,
         error

@@ -1,6 +1,6 @@
 // auth.effects.ts
-import { Injectable } from '@angular/core';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import { login, loginFailure, loginSuccess, register, registerFailure, registerSuccess } from './app.action';
 import { Actions, createEffect, ofType} from '@ngrx/effects';
 import { of } from 'rxjs';
@@ -9,12 +9,19 @@ import { userDTO } from '../shared/services/user.interface';
 
 @Injectable()
 export class AuthEffects {
+    private actions$ = inject(Actions)
+  constructor( private authService: AuthService) {}
+
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(login),
       mergeMap(({ credentials }) =>
         this.authService.getUser(credentials).pipe(
-          map((user: userDTO[]) => loginSuccess({ user:user[0] })),
+          map((user: userDTO[]) => {
+            if (user.length ===0) {
+                throw new Error('User not found');
+            }
+           return loginSuccess({ user:user[0] })}),
           catchError((error) => of(loginFailure({ error: error.message })))
         )
       )
@@ -32,5 +39,4 @@ export class AuthEffects {
     )
   );
 
-  constructor(private actions$: Actions, private authService: AuthService) {}
 }
