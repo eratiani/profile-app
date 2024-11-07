@@ -1,0 +1,45 @@
+@if(fileUrls().length == 0){
+
+<div
+  (click)="onClick()"
+  class="flex justify-center items-center h-[113px] w-auto lg:w-[400px]  cursor-pointer mb-1"
+>
+  <div
+    class="flex flex-col justify-center items-center gap-[10px] max-w-[400px] text-[#5A5A5A] font-semibold text-c-normal leading-[21.76px]"
+    style="
+      width: calc(100% - 2px);
+      background: rgba(255, 251, 238, 1);
+      height: 108px;
+    "
+  >
+    <img src="\assets\img\user-edit\upload-file.svg" alt="file image" />
+    <div>Click to upload</div>
+  </div>
+</div>
+
+}@else{
+<div class="flex flex-wrap gap-2">
+  @for(file of fileUrls();track file){
+  <img width="127px" height="127px" [src]="file" class="rounded-lg h-[127px]" />
+  }
+  <div
+    class="flex justify-center items-center rounded-lg min-h-[127px] w-[127px] bg-light-gray cursor-pointer"
+    (click)="onClick()"
+  >
+    <div
+      class="flex justify-center items-center bg-white hover:bg-light-gray rounded-full p-2"
+    >
+      <img
+        class=""
+        width="20px"
+        height="20px"
+        src="\assets\img\user-edit\add_circle.svg"
+        alt="add_circle"
+      />
+    </div>
+  </div>
+</div>
+
+}
+
+<input (input)="log($event)" type="file" #uploader class="hidden" />
