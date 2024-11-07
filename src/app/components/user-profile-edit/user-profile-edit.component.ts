@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap } from 'rxjs';
 import { AppUrlEnum } from '../../core/const/route-enums';
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-user-profile-edit',
@@ -15,12 +16,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './user-profile-edit.component.html',
 })
 export class UserProfileEditComponent implements OnInit {
-onAccept() {
-throw new Error('Method not implemented.');
-}
-onReject() {
-throw new Error('Method not implemented.');
-}
+  messageService = inject(MessageService)
   edit:boolean = false
   userId = ""
   userService = inject(UserService);
@@ -77,7 +73,18 @@ throw new Error('Method not implemented.');
       profilePicture:  formValue.customUploader ||""
     }
     
-    this.edit?this.userService.updateUser(this.userId,userdata).subscribe():this.userService.addUserData(userdata).subscribe()
+    this.edit?this.userService.updateUser(this.userId,userdata).subscribe({
+      next:()=>{
+          this.messageService.clear();
+          this.messageService.add({ severity: 'success', summary: 'SUCCESS', detail: "user Succesfully edited" ,life: 1000 });
+      }
+    }):this.userService.addUserData(userdata).subscribe(
+      {
+        next:()=>{
+        this.messageService.clear();
+        this.messageService.add({ severity: 'success', summary: 'SUCCESS', detail: "user Succesfully added" ,life: 1000 });
+    }}
+    )
     this.customUploaderReset.set(true);
     this.userUpdateForm.reset();
     this.router.navigate([AppUrlEnum.USER])

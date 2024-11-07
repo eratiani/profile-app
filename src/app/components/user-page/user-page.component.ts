@@ -12,6 +12,7 @@ import { UserService } from '../../shared/services/user.service';
 import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-user-page',
   standalone: true,
@@ -20,6 +21,7 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class UserPageComponent implements OnInit {
   users$!: Observable<IUser[]>;
+  messageService = inject(MessageService)
   store = inject(Store<AppInterface>)
   userService = inject(UserService)
   display = false
@@ -29,7 +31,12 @@ onReject() {
 }
 
 onDeleteUser(arg0: string,) {
-  this.userService.deleteUser(arg0).subscribe()
+  this.userService.deleteUser(arg0).subscribe({
+    next:()=>{
+      this.messageService.clear();
+      this.messageService.add({ severity: 'success', summary: 'SUCCESS', detail: "user deleted" ,life: 1000 });
+    }
+  })
   this.display = false
 }
  
