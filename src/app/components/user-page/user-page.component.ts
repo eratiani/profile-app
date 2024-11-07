@@ -11,22 +11,33 @@ import { PhoneFormatPipe } from '../../shared/pipes/phone-format.pipe';
 import { UserService } from '../../shared/services/user.service';
 import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule, PhoneFormatPipe, RouterLink],
+  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule, PhoneFormatPipe, RouterLink,DialogModule],
   templateUrl: './user-page.component.html',
 })
 export class UserPageComponent implements OnInit {
-onDeleteUser(arg0: any,ev:Event) {
-  ev.stopImmediatePropagation()
-  console.log("1111");
-}
   users$!: Observable<IUser[]>;
   store = inject(Store<AppInterface>)
   userService = inject(UserService)
-  constructor() {}
+  display = false
 
+onReject() {
+  this.display = false
+}
+
+onDeleteUser(arg0: string,) {
+  this.userService.deleteUser(arg0).subscribe()
+  this.display = false
+}
+ 
+  constructor() {}
+  onShowModal(ev:Event) {
+    ev.stopImmediatePropagation()
+  this.display = true
+  }
   ngOnInit() {
     this.users$ = this.userService.getUserData()
   }

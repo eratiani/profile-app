@@ -25,7 +25,15 @@ export const routes: Routes = [
     data: { pageRoute: AppUrlEnum.REGISTRATION },
   },
   {
-    path: `${AppUrlEnum.USER}/:id`,
+    path: `${AppUrlEnum.USER}/add`,
+    loadComponent: () =>
+      import('./components/user-profile-edit/user-profile-edit.component').then(
+        (m) => m.UserProfileEditComponent
+      ),
+      canActivate: [authGuard],
+  },
+  {
+    path: `${AppUrlEnum.USER}/edit/:id`,
     loadComponent: () =>
       import('./components/user-profile-edit/user-profile-edit.component').then(
         (m) => m.UserProfileEditComponent

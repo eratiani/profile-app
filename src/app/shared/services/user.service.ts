@@ -15,6 +15,15 @@ export class UserService {
   addUserData(userDTO: IUser) {
     return  this.http.post<IUser>(`${this.API}/userData`, userDTO)
   }
+  getUser(id:string):Observable<IUser>{
+    return this.http.get<IUser>(`${this.API}/userData/${id}`);
+  }
+  updateUser(id:string,data:IUser){
+    return this.http.patch<IUser[]>(`${this.API}/userData/${id}`,data);
+  }
+  deleteUser(id:string){
+    return this.http.delete(`${this.API}/userData/${id}`);
+  }
   getUserData():Observable<IUser[] |[]>  {
     // const params = new HttpParams()
     //   .set('userName', userDto.firstName + " " + userDto.lastName)
