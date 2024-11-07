@@ -6,11 +6,12 @@ import { IUser } from '../user-page/user.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap } from 'rxjs';
 import { AppUrlEnum } from '../../core/const/route-enums';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-profile-edit',
   standalone: true,
-  imports: [CustomUploaderComponent, ReactiveFormsModule],
+  imports: [CustomUploaderComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './user-profile-edit.component.html',
 })
 export class UserProfileEditComponent implements OnInit {
