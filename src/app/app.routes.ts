@@ -15,8 +15,10 @@ export const routes: Routes = [
   {
     path: AppUrlEnum.USER,
     loadComponent: () =>
-      import('./components/user-page/user-page.component').then((m) => m.UserPageComponent),
-      canActivate: [authGuard],
+      import('./components/user-page/user-page.component').then(
+        (m) => m.UserPageComponent
+      ),
+    canActivate: [authGuard],
   },
   {
     path: AppUrlEnum.REGISTRATION,
@@ -30,7 +32,7 @@ export const routes: Routes = [
       import('./components/user-profile-edit/user-profile-edit.component').then(
         (m) => m.UserProfileEditComponent
       ),
-      canActivate: [authGuard],
+    canActivate: [authGuard],
   },
   {
     path: `${AppUrlEnum.USER}/edit/:id`,
@@ -38,6 +40,6 @@ export const routes: Routes = [
       import('./components/user-profile-edit/user-profile-edit.component').then(
         (m) => m.UserProfileEditComponent
       ),
-      canActivate: [authGuard],
+    canActivate: [authGuard],
   },
 ];

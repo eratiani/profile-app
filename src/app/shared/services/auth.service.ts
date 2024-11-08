@@ -12,14 +12,16 @@ export class AuthService {
   private http = inject(HttpClient);
   constructor() {}
   registerUser(userDTO: userDTO) {
-    return this.getUser(userDTO).pipe(switchMap(val=>{
-      if (val.length>0) {
-        return throwError(() => new Error('User already exists'));
-      }
-      return  this.http.post<userDTO>(`${this.API}/users`, userDTO);
-    }))
+    return this.getUser(userDTO).pipe(
+      switchMap((val) => {
+        if (val.length > 0) {
+          return throwError(() => new Error('User already exists'));
+        }
+        return this.http.post<userDTO>(`${this.API}/users`, userDTO);
+      })
+    );
   }
-  getUser(userDto: userDTO):Observable<userDTO[] |[]>  {
+  getUser(userDto: userDTO): Observable<userDTO[] | []> {
     const params = new HttpParams()
       .set('userName', userDto.userName)
       .set('password', userDto.password);

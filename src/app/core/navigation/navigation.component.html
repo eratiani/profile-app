@@ -1,27 +1,49 @@
 <ul class="flex gap-4 items-center">
-    @if (!userLoggedIn) {
-    <li class="w-[90px]">
-        <app-lib-button [routerLink]="routeEnum.SIGNIN" [btnConfig]="{
-          type: 'button',
-          classList: 'h-4'
-        }" type="primary">Sign In</app-lib-button>
-    </li>
-    <li class="w-[90px]">
-        <app-lib-button [routerLink]="routeEnum.REGISTRATION" [btnConfig]="{
-          type: 'button'
-        }" type="secondary">Sign Up</app-lib-button>
-    </li>
-    } @else {
-    <li class="w-[90px]">
-        <app-lib-button [routerLink]="routeEnum.USER" [btnConfig]="{
-            type: 'button',
-            classList: 'h-4'
-          }" type="primary">userPage</app-lib-button>
-
-    </li>
-    <li class="w-[90px]"> <app-lib-button (click)="onUserLogOut()" [routerLink]="routeEnum.HOME" [btnConfig]="{
-          type: 'button',
-          classList: 'h-4'
-        }" type="secondary">Log Out</app-lib-button></li>
-    }
+  @if (!userLoggedIn) {
+  <li class="w-[90px]">
+    <app-lib-button
+      [routerLink]="routeEnum.SIGNIN"
+      [btnConfig]="{
+        type: 'button',
+        classList: 'h-4'
+      }"
+      type="primary"
+      >Sign In</app-lib-button
+    >
+  </li>
+  <li class="w-[90px]">
+    <app-lib-button
+      [routerLink]="routeEnum.REGISTRATION"
+      [btnConfig]="{
+        type: 'button'
+      }"
+      type="secondary"
+      >Sign Up</app-lib-button
+    >
+  </li>
+  } @else {
+  <li class="w-[90px]">
+    <app-lib-button
+      [routerLink]="routeEnum.USER"
+      [btnConfig]="{
+        type: 'button',
+        classList: 'h-4'
+      }"
+      type="primary"
+      >userPage</app-lib-button
+    >
+  </li>
+  <li class="w-[90px]">
+    <app-lib-button
+      (click)="onUserLogOut()"
+      [routerLink]="routeEnum.HOME"
+      [btnConfig]="{
+        type: 'button',
+        classList: 'h-4'
+      }"
+      type="secondary"
+      >Log Out</app-lib-button
+    >
+  </li>
+  }
 </ul>

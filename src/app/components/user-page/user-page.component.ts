@@ -18,39 +18,54 @@ import { fetchUsers } from '../../store/app.action';
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [TableModule, TagModule, RatingModule, ButtonModule, CommonModule, PhoneFormatPipe, RouterLink,DialogModule,],
+  imports: [
+    TableModule,
+    TagModule,
+    RatingModule,
+    ButtonModule,
+    CommonModule,
+    PhoneFormatPipe,
+    RouterLink,
+    DialogModule,
+  ],
   templateUrl: './user-page.component.html',
 })
 export class UserPageComponent implements OnInit {
-  users$!:Observable<IUser[]>;
-  messageService = inject(MessageService)
-  store = inject(Store<AppInterface>)
-  userService = inject(UserService)
-  display = false
+  users$!: Observable<IUser[]>;
+  messageService = inject(MessageService);
+  store = inject(Store<AppInterface>);
+  userService = inject(UserService);
+  display = false;
   constructor() {}
 
-onReject() {
-  this.display = false
-}
+  onReject() {
+    this.display = false;
+  }
 
-onDeleteUser(arg0: string,) {
-  this.userService.deleteUser(arg0).subscribe({
-    next:()=>{
-      this.messageService.clear();
-      this.messageService.add({ severity: 'success', summary: 'SUCCESS', detail: "user deleted" ,life: 1000 });
-    }
-  })
-  this.display = false
-}
- 
-  onShowModal(ev:Event) {
-    ev.stopImmediatePropagation()
-  this.display = true
+  onDeleteUser(arg0: string) {
+    this.userService.deleteUser(arg0).subscribe({
+      next: () => {
+        this.messageService.clear();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'SUCCESS',
+          detail: 'user deleted',
+          life: 1000,
+        });
+      },
+    });
+    this.display = false;
+  }
+
+  onShowModal(ev: Event) {
+    ev.stopImmediatePropagation();
+    this.display = true;
   }
   ngOnInit() {
     // this.users$ = this.userService.getUserData()
-     this.store.dispatch(fetchUsers())
-    this.users$ = this.store.select((state: { app: AppInterface }) => state.app.users)
-    .pipe(distinctUntilChanged());
+    this.store.dispatch(fetchUsers());
+    this.users$ = this.store
+      .select((state: { app: AppInterface }) => state.app.users)
+      .pipe(distinctUntilChanged());
   }
 }

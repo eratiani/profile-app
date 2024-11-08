@@ -13,28 +13,37 @@ import { RippleModule } from 'primeng/ripple';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, ToastModule, ButtonModule, RippleModule, ],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    ToastModule,
+    ButtonModule,
+    RippleModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [],
 })
 export class AppComponent implements OnInit {
   title = 'profile-app';
-   messageService = inject(MessageService);
+  messageService = inject(MessageService);
   private store = inject(Store<AppInterface>);
   ngOnInit(): void {
-    
     this.store
       .pipe(select((state) => state.app.auth.error))
       .pipe(
-        tap((val) =>{
+        tap((val) => {
           if (val) {
             this.messageService.clear();
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: val ,life: 1000 });
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: val,
+              life: 1000,
+            });
           }
-          
-        }
-        )
+        })
       )
       .subscribe();
   }

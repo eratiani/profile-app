@@ -1,10 +1,10 @@
-import { IUser } from "../components/user-page/user.interface";
-import { userDTO } from "../shared/services/user.interface";
+import { IUser } from '../components/user-page/user.interface';
+import { userDTO } from '../shared/services/user.interface';
 
 export interface AppInterface {
   auth: AuthState;
-  users:IUser[],
-  items:number
+  users: IUser[];
+  items: number;
 }
 export interface AuthState {
   user: userDTO | null;
