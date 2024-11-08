@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Input,
   signal,
   viewChild,
 } from '@angular/core';
@@ -23,7 +22,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class CustomUploaderComponent implements ControlValueAccessor {
-  
   uploader = viewChild('uploader', { read: ElementRef<any> });
   fileUrls = signal<string[]>([]);
   filesArr = signal<any>([]);
@@ -48,15 +46,12 @@ export class CustomUploaderComponent implements ControlValueAccessor {
   log(event: Event) {
     const filefileInputElement = event.target as HTMLInputElement;
     if (filefileInputElement.files && filefileInputElement.files[0]) {
-      console.log('files', filefileInputElement.files);
       var reader = new FileReader();
       reader.onloadend = () => {
         var baseStringResult = reader.result as string;
         const imageUrl = baseStringResult;
-        this.fileUrls.set([ imageUrl]);
-        this.filesArr.set(
-          filefileInputElement?.files?.[0],
-        );
+        this.fileUrls.set([imageUrl]);
+        this.filesArr.set(filefileInputElement?.files?.[0]);
         this.onChange(imageUrl);
         filefileInputElement.value = '';
       };

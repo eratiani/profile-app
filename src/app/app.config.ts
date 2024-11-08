@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -18,11 +22,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideStore(),
     provideState({
-      name:"app",
-      reducer:appReducer
+      name: 'app',
+      reducer: appReducer,
     }),
     provideEffects(AuthEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: false }),
-    importProvidersFrom(BrowserAnimationsModule)
+    importProvidersFrom(BrowserAnimationsModule),
   ],
 };

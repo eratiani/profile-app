@@ -2,6 +2,6 @@ export interface ILibButton {
   classList?: string | string[];
   type?: string;
   disabled?: boolean;
-  active? : boolean;
+  active?: boolean;
 }
-export type LibButtonType = 'primary' | "secondary" ;
+export type LibButtonType = 'primary' | 'secondary';

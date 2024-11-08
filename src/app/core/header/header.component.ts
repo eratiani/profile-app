@@ -6,9 +6,9 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NavigationComponent,RouterLink],
+  imports: [NavigationComponent, RouterLink],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-apiUrl = AppUrlEnum
+  apiUrl = AppUrlEnum;
 }
