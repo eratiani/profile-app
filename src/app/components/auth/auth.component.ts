@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AppUrlEnum } from '../../core/const/route-enums';
 import {
@@ -12,13 +12,15 @@ import { userDTO } from '../../shared/services/user.interface';
 import { select, Store } from '@ngrx/store';
 import { AppInterface } from '../../store/app.interface';
 import { login, register } from '../../store/app.action';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './auth.component.html',
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
   apiUrl = AppUrlEnum;
   pageRoute!: AppUrlEnum;
   authForm!: FormGroup;
@@ -29,7 +31,10 @@ export class AuthComponent implements OnInit {
   ngOnInit(): void {
     this.initFOrm();
     this.pageRoute = this.route.snapshot.data['pageRoute'];
-    this.store.pipe(select((state) => state.app.auth.isLoggedIn)).subscribe();
+    this.store
+      .pipe(select((state) => state.app.auth.isLoggedIn))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
   initFOrm() {
     this.authForm = this.fb.group({
@@ -49,5 +54,9 @@ export class AuthComponent implements OnInit {
   }
   onRegister(user: userDTO) {
     this.store.dispatch(register({ credentials: user }));
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

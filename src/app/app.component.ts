@@ -1,10 +1,16 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { AppInterface } from './store/app.interface';
 import { select, Store } from '@ngrx/store';
-import { tap } from 'rxjs';
+import { Subject, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +31,8 @@ import { RippleModule } from 'primeng/ripple';
   styleUrl: './app.component.scss',
   providers: [],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
   title = 'profile-app';
   messageService = inject(MessageService);
   private store = inject(Store<AppInterface>);
@@ -46,5 +53,9 @@ export class AppComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

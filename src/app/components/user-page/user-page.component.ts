@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
@@ -9,7 +9,14 @@ import { AppInterface } from '../../store/app.interface';
 import { Store } from '@ngrx/store';
 import { PhoneFormatPipe } from '../../shared/pipes/phone-format.pipe';
 import { UserService } from '../../shared/services/user.service';
-import { distinctUntilChanged, Observable } from 'rxjs';
+import {
+  distinctUntilChanged,
+  Observable,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
@@ -30,7 +37,9 @@ import { fetchUsers } from '../../store/app.action';
   ],
   templateUrl: './user-page.component.html',
 })
-export class UserPageComponent implements OnInit {
+export class UserPageComponent implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
   users$!: Observable<IUser[]>;
   messageService = inject(MessageService);
   store = inject(Store<AppInterface>);
@@ -43,17 +52,23 @@ export class UserPageComponent implements OnInit {
   }
 
   onDeleteUser(arg0: string) {
-    this.userService.deleteUser(arg0).subscribe({
-      next: () => {
-        this.messageService.clear();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'SUCCESS',
-          detail: 'user deleted',
-          life: 1000,
-        });
-      },
-    });
+    this.userService
+      .deleteUser(arg0)
+      .pipe(
+        tap(() => this.store.dispatch(fetchUsers())),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          this.messageService.clear();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'SUCCESS',
+            detail: 'user deleted',
+            life: 1000,
+          });
+        },
+      });
     this.display = false;
   }
 
@@ -67,5 +82,9 @@ export class UserPageComponent implements OnInit {
     this.users$ = this.store
       .select((state: { app: AppInterface }) => state.app.users)
       .pipe(distinctUntilChanged());
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
