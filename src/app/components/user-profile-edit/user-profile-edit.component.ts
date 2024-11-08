@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CustomUploaderComponent } from './custom-uploader/custom-uploader.component';
 import {
   FormGroup,
@@ -9,7 +9,7 @@ import {
 import { UserService } from '../../shared/services/user.service';
 import { IUser } from '../user-page/user.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, switchMap } from 'rxjs';
+import { of, Subject, switchMap, takeUntil } from 'rxjs';
 import { AppUrlEnum } from '../../core/const/route-enums';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
@@ -20,7 +20,9 @@ import { MessageService } from 'primeng/api';
   imports: [CustomUploaderComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './user-profile-edit.component.html',
 })
-export class UserProfileEditComponent implements OnInit {
+export class UserProfileEditComponent implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
   messageService = inject(MessageService);
   edit: boolean = false;
   userId = '';
@@ -38,7 +40,8 @@ export class UserProfileEditComponent implements OnInit {
             return this.userService.getUser(id);
           }
           return of(null);
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe({
         next: (val) => {
@@ -85,30 +88,41 @@ export class UserProfileEditComponent implements OnInit {
     };
 
     this.edit
-      ? this.userService.updateUser(this.userId, userdata).subscribe({
-          next: () => {
-            this.messageService.clear();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'SUCCESS',
-              detail: 'user Succesfully edited',
-              life: 1000,
-            });
-          },
-        })
-      : this.userService.addUserData(userdata).subscribe({
-          next: () => {
-            this.messageService.clear();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'SUCCESS',
-              detail: 'user Succesfully added',
-              life: 1000,
-            });
-          },
-        });
+      ? this.userService
+          .updateUser(this.userId, userdata)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.messageService.clear();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'SUCCESS',
+                detail: 'user Succesfully edited',
+                life: 1000,
+              });
+              this.router.navigate([AppUrlEnum.USER]);
+            },
+          })
+      : this.userService
+          .addUserData(userdata)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.messageService.clear();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'SUCCESS',
+                detail: 'user Succesfully added',
+                life: 1000,
+              });
+              this.router.navigate([AppUrlEnum.USER]);
+            },
+          });
     this.customUploaderReset.set(true);
     this.userUpdateForm.reset();
-    this.router.navigate([AppUrlEnum.USER]);
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
