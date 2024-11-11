@@ -20,7 +20,7 @@ import {
 import { RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
-import { fetchUsers } from '../../store/app.action';
+import { deleteUser, fetchUsers } from '../../store/app.action';
 
 @Component({
   selector: 'app-user-page',
@@ -55,7 +55,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.userService
       .deleteUser(arg0)
       .pipe(
-        tap(() => this.store.dispatch(fetchUsers())),
+        tap(() => this.store.dispatch(deleteUser({userId:arg0}))),
         takeUntil(this.destroy$)
       )
       .subscribe({
@@ -77,7 +77,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.display = true;
   }
   ngOnInit() {
-    // this.users$ = this.userService.getUserData()
     this.store.dispatch(fetchUsers());
     this.users$ = this.store
       .select((state: { app: AppInterface }) => state.app.users)

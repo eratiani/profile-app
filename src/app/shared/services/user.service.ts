@@ -46,7 +46,7 @@ export class UserService {
     );
   }
   updateUser(id: string, data: IUser) {
-    return this.http.patch<IUser[]>(`${this.API}/userData/${id}`, data).pipe(
+    return this.http.patch<IUser>(`${this.API}/userData/${id}`, data).pipe(
       catchError((err) => {
         this.messageService.clear();
         const errorMessage =

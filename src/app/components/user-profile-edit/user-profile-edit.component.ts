@@ -9,10 +9,14 @@ import {
 import { UserService } from '../../shared/services/user.service';
 import { IUser } from '../user-page/user.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, Subject, switchMap, takeUntil } from 'rxjs';
+import { of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AppUrlEnum } from '../../core/const/route-enums';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
+import { AppInterface } from '../../store/app.interface';
+import { Store } from '@ngrx/store';
+import { addUser, fetchUser, updateUser } from '../../store/app.action';
+import { selectSelectedUser } from '../../store/app.selectors';
 
 @Component({
   selector: 'app-user-profile-edit',
@@ -22,7 +26,7 @@ import { MessageService } from 'primeng/api';
 })
 export class UserProfileEditComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
-
+  private store = inject(Store<AppInterface>)
   messageService = inject(MessageService);
   edit: boolean = false;
   userId = '';
@@ -33,21 +37,26 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
     this.initialiseForm();
     this.route.paramMap
       .pipe(
-        switchMap((route) => {
+        tap((route) => {
           const id = route.get('id');
           if (id) {
             this.userId = id;
-            return this.userService.getUser(id);
+            of(this.store.dispatch(fetchUser({userId:id})))
           }
-          return of(null);
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe({
-        next: (val) => {
-          val ? (this.edit = true) : (this.edit = false);
-          val ? this.initialiseForm(val) : this.initialiseForm();
-        },
+      .subscribe();
+      this.store.select(selectSelectedUser)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        if (user) {
+          this.edit = true;
+          this.initialiseForm(user); 
+        } else {
+          this.edit = false;
+          this.initialiseForm();
+        }
       });
   }
   customUploaderReset = signal<any>(false);
@@ -90,7 +99,7 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
     this.edit
       ? this.userService
           .updateUser(this.userId, userdata)
-          .pipe(takeUntil(this.destroy$))
+          .pipe(tap(user=>this.store.dispatch(updateUser({userId:this.userId,user:user}))),takeUntil(this.destroy$))
           .subscribe({
             next: () => {
               this.messageService.clear();
@@ -105,7 +114,7 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
           })
       : this.userService
           .addUserData(userdata)
-          .pipe(takeUntil(this.destroy$))
+          .pipe(tap(user=>this.store.dispatch(addUser({user}))),takeUntil(this.destroy$))
           .subscribe({
             next: () => {
               this.messageService.clear();

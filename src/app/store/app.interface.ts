@@ -5,6 +5,7 @@ export interface AppInterface {
   auth: AuthState;
   users: IUser[];
   items: number;
+  selectedUser:IUser |null
 }
 export interface AuthState {
   user: userDTO | null;
