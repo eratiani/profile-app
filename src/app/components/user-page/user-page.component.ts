@@ -9,18 +9,12 @@ import { AppInterface } from '../../store/app.interface';
 import { Store } from '@ngrx/store';
 import { PhoneFormatPipe } from '../../shared/pipes/phone-format.pipe';
 import { UserService } from '../../shared/services/user.service';
-import {
-  distinctUntilChanged,
-  Observable,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { deleteUser, fetchUsers } from '../../store/app.action';
+import { selectUsers } from '../../store/app.selectors';
 
 @Component({
   selector: 'app-user-page',
@@ -55,7 +49,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.userService
       .deleteUser(arg0)
       .pipe(
-        tap(() => this.store.dispatch(deleteUser({userId:arg0}))),
+        tap(() => this.store.dispatch(deleteUser({ userId: arg0 }))),
         takeUntil(this.destroy$)
       )
       .subscribe({
@@ -78,9 +72,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.store.dispatch(fetchUsers());
-    this.users$ = this.store
-      .select((state: { app: AppInterface }) => state.app.users)
-      .pipe(distinctUntilChanged());
+    this.users$ = this.store.select(selectUsers);
   }
   ngOnDestroy(): void {
     this.destroy$.next(true);

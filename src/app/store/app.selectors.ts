@@ -8,3 +8,8 @@ export const selectSelectedUser = createSelector(
   (state) => {
     return state?.selectedUser}
 );
+export const selectUsers = createSelector(
+  selectAuthState,
+  (state) => {
+    return state?.users}
+);

@@ -42,6 +42,7 @@ export const fetchUsersFailure = createAction(
 
 
 export const fetchUser = createAction('[auth] fetchUser',props<{userId:string}>())
+export const resteUser = createAction('[auth] resetUser')
 export const updateUser = createAction('[auth] updateUser',props<{userId:string,user:IUser}>())
 export const addUser = createAction('[auth] createUser',props<{user:IUser}>())
 export const deleteUser = createAction('[auth] deleteUser',props<{userId:string}>())

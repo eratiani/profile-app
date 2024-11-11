@@ -9,13 +9,18 @@ import {
 import { UserService } from '../../shared/services/user.service';
 import { IUser } from '../user-page/user.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { AppUrlEnum } from '../../core/const/route-enums';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { AppInterface } from '../../store/app.interface';
 import { Store } from '@ngrx/store';
-import { addUser, fetchUser, updateUser } from '../../store/app.action';
+import {
+  addUser,
+  fetchUser,
+  resteUser,
+  updateUser,
+} from '../../store/app.action';
 import { selectSelectedUser } from '../../store/app.selectors';
 
 @Component({
@@ -26,7 +31,7 @@ import { selectSelectedUser } from '../../store/app.selectors';
 })
 export class UserProfileEditComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
-  private store = inject(Store<AppInterface>)
+  private store = inject(Store<AppInterface>);
   messageService = inject(MessageService);
   edit: boolean = false;
   userId = '';
@@ -41,18 +46,20 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
           const id = route.get('id');
           if (id) {
             this.userId = id;
-            of(this.store.dispatch(fetchUser({userId:id})))
+
+            this.store.dispatch(fetchUser({ userId: id }));
           }
         }),
         takeUntil(this.destroy$)
       )
       .subscribe();
-      this.store.select(selectSelectedUser)
+    this.store
+      .select(selectSelectedUser)
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
         if (user) {
           this.edit = true;
-          this.initialiseForm(user); 
+          this.initialiseForm(user);
         } else {
           this.edit = false;
           this.initialiseForm();
@@ -95,11 +102,17 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
       phoneNumber: formValue.phoneNumber || '',
       profilePicture: formValue.customUploader || '',
     };
-
     this.edit
       ? this.userService
           .updateUser(this.userId, userdata)
-          .pipe(tap(user=>this.store.dispatch(updateUser({userId:this.userId,user:user}))),takeUntil(this.destroy$))
+          .pipe(
+            tap((user) =>
+              this.store.dispatch(
+                updateUser({ userId: this.userId, user: user })
+              )
+            ),
+            takeUntil(this.destroy$)
+          )
           .subscribe({
             next: () => {
               this.messageService.clear();
@@ -114,7 +127,10 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
           })
       : this.userService
           .addUserData(userdata)
-          .pipe(tap(user=>this.store.dispatch(addUser({user}))),takeUntil(this.destroy$))
+          .pipe(
+            tap((user) => this.store.dispatch(addUser({ user }))),
+            takeUntil(this.destroy$)
+          )
           .subscribe({
             next: () => {
               this.messageService.clear();
@@ -133,5 +149,6 @@ export class UserProfileEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+    this.store.dispatch(resteUser());
   }
 }

@@ -13,8 +13,10 @@ import {
   register,
   registerFailure,
   registerSuccess,
+  resteUser,
   updateUser,
 } from './app.action';
+import { IUser } from '../components/user-page/user.interface';
 
 export const initState: AppInterface = {
   auth: {
@@ -94,6 +96,8 @@ export const appReducer = createReducer(
     error,
   })),
   on(fetchUser,(state,{userId})=>{
+    console.log(state.users.find(user => user.id === userId));
+    
     return {
       ...state,
       selectedUser: state.users.find(user => user.id === userId) || null
@@ -119,6 +123,12 @@ export const appReducer = createReducer(
     return {
       ...state,
       users: [...state.users.filter(user=>user.id!==userId)],
+      selectedUser: null 
+    };
+  }),
+  on(resteUser,(state,)=>{
+    return {
+      ...state,
       selectedUser: null 
     };
   })
